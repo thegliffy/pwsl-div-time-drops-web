@@ -1,6 +1,24 @@
 services:
   web:
     build: .
+    image: pwsl-div-time-drops-web:latest
+    container_name: pwsl-div-time-drops-web
     ports:
-      - "8000:8000"
+      # Bind to localhost by default so a reverse proxy (Caddy/nginx) can
+      # terminate TLS. Override with APP_BIND=0.0.0.0 to expose directly.
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8000}:8000"
+    environment:
+      TZ: ${TZ:-America/New_York}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
