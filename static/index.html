@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PWSL Time Drop Finder</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>PWSL Time Drop Finder</h1>
+      <p>
+        Upload a single meet’s Meet Maestro
+        <strong>Time Improvement / Personal Best labels</strong> PDF.
+        The app finds every swim with a qualifying time drop and builds a
+        printable label sheet.
+      </p>
+    </header>
+
+    <form id="generate-form" class="form" novalidate>
+      <fieldset class="field">
+        <legend>1. Time Improvement (Personal Best) labels PDF</legend>
+        <label class="file-label" for="file">
+          <span class="file-button">Choose PDF…</span>
+          <span id="file-name" class="file-name">No file selected</span>
+        </label>
+        <input
+          id="file"
+          name="file"
+          type="file"
+          accept="application/pdf,.pdf"
+          required
+        />
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>2. Output file name</legend>
+        <div class="filename-row">
+          <label class="sr-only" for="filename">Output file name</label>
+          <input
+            id="filename"
+            name="filename"
+            type="text"
+            value="time_drop_labels"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <span class="suffix">.pdf</span>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>3. Minimum time drop to include (seconds)</legend>
+        <label class="sr-only" for="min_drop">Minimum drop in seconds</label>
+        <input
+          id="min_drop"
+          name="min_drop"
+          type="number"
+          min="0"
+          step="0.01"
+          value="1.0"
+          required
+        />
+      </fieldset>
+
+      <button id="submit-btn" type="submit" class="primary">
+        Generate Label Sheet
+      </button>
+    </form>
+
+    <section id="status" class="status" aria-live="polite" hidden>
+      <h2>Progress</h2>
+      <pre id="status-log" class="status-log"></pre>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Export the <em>Personal Best</em> or <em>Improvement</em> labels report
+        from Meet Maestro — not the general Results PDF.
+      </p>
+    </footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
