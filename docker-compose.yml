@@ -4,9 +4,9 @@ services:
     image: pwsl-div-time-drops-web:latest
     container_name: pwsl-div-time-drops-web
     ports:
-      # Bind to localhost by default so a reverse proxy (Caddy/nginx) can
-      # terminate TLS. Override with APP_BIND=0.0.0.0 to expose directly.
-      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8000}:8000"
+      # Published on all interfaces by default so the app is reachable on the
+      # LAN/internet. Set APP_BIND=127.0.0.1 if you put a reverse proxy in front.
+      - "${APP_BIND:-0.0.0.0}:${APP_PORT:-8000}:8000"
     environment:
       TZ: ${TZ:-America/New_York}
     healthcheck:

@@ -25,50 +25,38 @@ Open [http://localhost:8000](http://localhost:8000).
 
 ## Deploy on a server
 
-The compose file binds to `127.0.0.1:8000` by default so you can put Caddy or
-nginx in front for HTTPS.
+The compose file publishes port `8000` on all interfaces by default
+(`0.0.0.0:8000`). Open that port in your firewall if needed.
 
 ```bash
-git clone git@github.com:thegliffy/pwsl-div-time-drops-web.git
+git clone https://github.com/thegliffy/pwsl-div-time-drops-web.git
 cd pwsl-div-time-drops-web
 cp .env.example .env   # optional — edit APP_PORT / APP_BIND if needed
 docker compose up --build -d
 ```
 
+Then open `http://YOUR_SERVER_IP:8000`.
+
 Useful commands:
 
 ```bash
-docker compose logs -f      # follow logs
-docker compose pull         # if you later switch to a published image
+docker compose logs -f
 docker compose up --build -d
 docker compose down
 ```
 
-Example Caddy reverse proxy:
+To bind localhost-only behind a reverse proxy instead:
+
+```bash
+APP_BIND=127.0.0.1 docker compose up --build -d
+```
+
+Example Caddy reverse proxy (with `APP_BIND=127.0.0.1`):
 
 ```caddy
 timedrops.example.com {
     reverse_proxy 127.0.0.1:8000
 }
-```
-
-Example nginx location:
-
-```nginx
-location / {
-    proxy_pass http://127.0.0.1:8000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    client_max_body_size 25m;
-}
-```
-
-To expose the container directly on all interfaces (no reverse proxy):
-
-```bash
-APP_BIND=0.0.0.0 APP_PORT=8000 docker compose up --build -d
 ```
 
 ## Run locally (without Docker)
